@@ -1,12 +1,14 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { TreeViewComponent } from './components/tree-view/tree-view.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  imports: [CommonModule, TreeViewComponent],
+  template: `
+    <app-tree-view></app-tree-view>
+  `
 })
 export class AppComponent {
-  title = 'multi-level-tree';
+  title = 'Tree Structure Visualization';
 }
