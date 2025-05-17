@@ -2,12 +2,12 @@ export interface TreeNode {
   id: string;
   name: string;
   description?: string;
-  isCategory: boolean;
+  //isCategory: boolean;
   children?: TreeNode[];
   metadata?: {
     [key: string]: any;
   };
-  iconClass?: string;
+  icon?: string;
   expanded?: boolean;
 }
 

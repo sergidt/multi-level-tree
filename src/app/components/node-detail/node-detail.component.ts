@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { TreeNode } from '../../models/model';
 
 @Component({
@@ -12,7 +12,7 @@ import { TreeNode } from '../../models/model';
 
     <div class="node-detail slide-in">
       <div class="node-header">
-        <div class="node-icon large" [class]="node.iconClass || 'default-icon'"></div>
+        <div class="node-icon large" >{{node.icon}}</div>
         <h2>{{ node.name }}</h2>
       </div>
 
@@ -29,7 +29,7 @@ import { TreeNode } from '../../models/model';
           }
         </div>
 
-        <div class="children-summary" *ngIf="node.isCategory && node.children">
+        <div class="children-summary" *ngIf="isCategory() && node.children">
           <p>
             <span class="children-count">{{ node.children.length }}</span> items
           </p>
@@ -39,8 +39,8 @@ import { TreeNode } from '../../models/model';
             @for (child of node.children; track child.id) {
             <li >
               {{ child.name }}
-            @if (child.isCategory) {
-              <span>({{ child.children?.length || 0 }} items)</span>
+            @if (child.children) {
+              <span>({{ child.children!.length || 0 }} items)</span>
             }
             </li>
             }
@@ -55,6 +55,11 @@ import { TreeNode } from '../../models/model';
 })
 export class NodeDetailComponent {
   selectedNode = input.required<TreeNode>();
+
+  isCategory = computed(() => {
+    const node = this.selectedNode();
+    return node.children;
+  });
 
   get metadataItems(): { key: string, value: any }[] {
     if (!this.selectedNode().metadata) return [];

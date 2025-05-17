@@ -30,13 +30,13 @@ export class TreeService {
   selectNode(node: TreeNode): void {
     this.selectedNode.set(node);
 
-    if (node.isCategory && node.children && node.children.length > 0) {
+    if (node.children && node.children.length > 0) {
       this.navigateToNode(node);
     }
   }
 
   navigateToNode(node: TreeNode): void {
-    if (node.isCategory && node.children) {
+    if (node.children) {
       this.currentTree.set(node.children);
 
       // Update breadcrumb
