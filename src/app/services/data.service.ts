@@ -15,9 +15,10 @@ export class DataService {
     request: () => this.searchQuery(),
     loader: async ({ request, abortSignal }) => {
       return !request.trim()
-        ? []
+        ? this.data
         : this.searchNodes(this.data, request.toLowerCase())
-    }
+    },
+    defaultValue: []
   });
 
   private searchNodes(nodes: TreeNode[], query: string): TreeNode[] {

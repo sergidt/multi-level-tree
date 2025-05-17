@@ -1,4 +1,4 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { inject, Injectable, linkedSignal, signal } from '@angular/core';
 import { BreadcrumbItem, TreeNode } from '../models/model';
 import { DataService } from './data.service';
 
@@ -9,7 +9,7 @@ import { DataService } from './data.service';
 export class TreeService {
   dataService = inject(DataService);
 
-  currentTree = signal<TreeNode[]>(this.dataService.data);
+  currentTree = linkedSignal<TreeNode[]>(() => this.dataService.searchResults.value());
 
   selectedNode = signal<TreeNode | undefined>(undefined);
 
@@ -40,20 +40,14 @@ export class TreeService {
     const currentBreadcrumb = this.breadcrumb();
     const index = currentBreadcrumb.findIndex(item => item.id === breadcrumbItem.id);
 
-    if (index === -1) return;
+    if (index !== -1) {
+      // Update breadcrumb
+      const newBreadcrumb = currentBreadcrumb.slice(0, index + 1);
+      this.breadcrumb.set(newBreadcrumb);
 
-    // Update breadcrumb
-    const newBreadcrumb = currentBreadcrumb.slice(0, index + 1);
-    this.breadcrumb.set(newBreadcrumb);
-
-    // Update current tree
-    if (index === 0) {
-      // Root level
-      this.currentTree.set(this.dataService.data);
-    } else {
       // Find the node that corresponds to this breadcrumb
       let currentLevel = this.dataService.data;
-      for (let i = 0; i < index; i++) {
+      for (let i = 0; i <= index; i++) {
         const nodeId = currentBreadcrumb[i].id;
         const node = this.findNodeById(currentLevel, nodeId);
         if (node && node.children) {
