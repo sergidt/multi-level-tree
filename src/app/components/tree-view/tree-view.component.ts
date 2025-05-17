@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, linkedSignal, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { TreeNode } from '../../models/model';
-import { TreeService } from '../../tree.service';
+import { DataService } from '../../services/data.service';
+import { TreeService } from '../../services/tree.service';
 import { BreadcrumbComponent } from "../breadcrumb/breadcrumb.component";
 import { NodeDetailComponent } from "../node-detail/node-detail.component";
 import { SearchBarComponent } from "../search/search-bar.component";
@@ -20,8 +21,7 @@ import { TreeNodeComponent } from "../tree-node/tree-node.component";
 
       <div class="content-container">
         <div class="tree-nodes-container">
-          @if(searchResults.length <= 0) {
-            <h2 class="section-title">{{ currentLevel() }}</h2>
+          @if(searchResults.hasValue()) {
             <div class="tree-nodes-list fade-in">
             @for (node of treeService.currentTree(); track $index) {
               <app-tree-node
@@ -29,20 +29,15 @@ import { TreeNodeComponent } from "../tree-node/tree-node.component";
                 (nodeSelected)="onNodeSelected($event)"/>
             }
             </div>
-              }@else if(searchResults.length > 0) {
+              }@else if(searchResults.hasValue()) {
             <h2 class="section-title">Search Results</h2>
             <div class="search-results-list fade-in">
-              @for (node of searchResults; track $index) {
+              @for (node of searchResults.value(); track $index) {
               <app-tree-node
                 [node]="node"
                 [isSearchResult]="true"
                 (nodeSelected)="onNodeSelected($event)"/>
             }
-              <button
-                class="clear-search-button"
-                (click)="clearSearch()">
-                Clear Search
-              </button>
             </div>
               }
         </div>
@@ -57,35 +52,13 @@ import { TreeNodeComponent } from "../tree-node/tree-node.component";
   styleUrl: 'tree-view.component.scss',
   imports: [SearchBarComponent, BreadcrumbComponent, TreeNodeComponent, NodeDetailComponent, CommonModule]
 })
-export class TreeViewComponent implements OnInit {
-
+export class TreeViewComponent {
   treeService = inject(TreeService);
+  dataService = inject(DataService);
 
-  currentLevel = linkedSignal({
-    source: this.treeService.breadcrumb,
-    computation: () => {
-      const breadcrumb = this.treeService.breadcrumb();
-
-      return breadcrumb.length > 0
-        ? breadcrumb[breadcrumb.length - 1].name
-        : 'Categories';
-
-    }
-  });
-
-  searchResults: TreeNode[] = [];
-
-  ngOnInit(): void {
-    this.treeService.searchResults$.subscribe(results => {
-      this.searchResults = results;
-    });
-  }
+  searchResults = this.dataService.searchResults;
 
   onNodeSelected(node: TreeNode): void {
     this.treeService.selectNode(node);
-  }
-
-  clearSearch(): void {
-    this.treeService.search('');
   }
 }

@@ -1,27 +1,21 @@
-import { Injectable, signal } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { TREE_DATA } from './models/data';
-import { BreadcrumbItem, TreeNode } from './models/model';
+import { inject, Injectable, signal } from '@angular/core';
+import { BreadcrumbItem, TreeNode } from '../models/model';
+import { DataService } from './data.service';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class TreeService {
-  data: TreeNode[] = TREE_DATA;
+  dataService = inject(DataService);
 
-  currentTree = signal<TreeNode[]>(this.data);
+  currentTree = signal<TreeNode[]>(this.dataService.data);
 
   selectedNode = signal<TreeNode | undefined>(undefined);
 
-
   breadcrumb = signal<BreadcrumbItem[]>([]);
 
-  private searchResultsSource = new BehaviorSubject<TreeNode[]>([]);
-  // TODO: RESOURCE
-  searchResults$ = this.searchResultsSource.asObservable();
-
-  constructor() { }
+  searchTerm = signal<string>('');
 
   getTopLevelNodes(): TreeNode[] {
     return this.currentTree();
@@ -38,10 +32,7 @@ export class TreeService {
   navigateToNode(node: TreeNode): void {
     if (node.children) {
       this.currentTree.set(node.children);
-
-      // Update breadcrumb
-      const newBreadcrumb = [...this.breadcrumb(), { id: node.id, name: node.name }];
-      this.breadcrumb.set(newBreadcrumb);
+      this.breadcrumb.set([...this.breadcrumb(), { id: node.id, name: node.name }]);
     }
   }
 
@@ -58,10 +49,10 @@ export class TreeService {
     // Update current tree
     if (index === 0) {
       // Root level
-      this.currentTree.set(this.data);
+      this.currentTree.set(this.dataService.data);
     } else {
       // Find the node that corresponds to this breadcrumb
-      let currentLevel = this.data;
+      let currentLevel = this.dataService.data;
       for (let i = 0; i < index; i++) {
         const nodeId = currentBreadcrumb[i].id;
         const node = this.findNodeById(currentLevel, nodeId);
@@ -74,37 +65,9 @@ export class TreeService {
   }
 
   navigateToRoot(): void {
-    this.currentTree.set(this.data);
+    this.currentTree.set(this.dataService.data);
     this.breadcrumb.set([]);
     this.selectedNode.set(undefined);
-  }
-
-  search(query: string): void {
-    if (!query.trim()) {
-      this.searchResultsSource.next([]);
-      return;
-    }
-
-    const results = this.searchNodes(this.data, query.toLowerCase());
-    this.searchResultsSource.next(results);
-  }
-
-  private searchNodes(nodes: TreeNode[], query: string): TreeNode[] {
-    const results: TreeNode[] = [];
-
-    for (const node of nodes) {
-      if (node.name.toLowerCase().includes(query) ||
-        (node.description && node.description.toLowerCase().includes(query))) {
-        results.push(node);
-      }
-
-      if (node.children && node.children.length > 0) {
-        const childResults = this.searchNodes(node.children, query);
-        results.push(...childResults);
-      }
-    }
-
-    return results;
   }
 
   private findNodeById(nodes: TreeNode[], id: string): TreeNode | null {

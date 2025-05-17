@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { AfterViewInit, Component, DestroyRef, ElementRef, inject, viewChild } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
-import { TreeService } from '../../tree.service';
+import { debounceTime, fromEvent } from 'rxjs';
+import { DataService } from '../../services/data.service';
 
 @Component({
   selector: 'app-search-bar',
@@ -11,17 +13,16 @@ import { TreeService } from '../../tree.service';
     <div class="search-bar">
       <div class="search-input-container">
         <input
+        #searchInput
           type="text"
           class="search-input"
           placeholder="Search categories and items..."
-          [(ngModel)]="searchQuery"
-          (input)="onSearch()"
         />
 
-        @if(searchQuery) {
+        @if(dataService.searchQuery()) {
         <button
           class="clear-button"
-          (click)="clearSearch()">
+          (click)="clearSearchQuery()">
           ×
         </button>
         }
@@ -30,17 +31,22 @@ import { TreeService } from '../../tree.service';
   `,
   styleUrl: 'search-bar.component.scss'
 })
-export class SearchBarComponent {
-  searchQuery: string = '';
+export class SearchBarComponent implements AfterViewInit {
+  dataService = inject(DataService);
+  destroyRef = inject(DestroyRef);
+  input = viewChild.required<ElementRef<HTMLInputElement>>('searchInput');
 
-  private treeService = inject(TreeService);
-
-  onSearch(): void {
-    this.treeService.search(this.searchQuery);
+  ngAfterViewInit() {
+    fromEvent(this.input().nativeElement, 'input')
+      .pipe(
+        debounceTime(250),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(_ => this.dataService.searchQuery.set((_.target as HTMLInputElement).value));
   }
 
-  clearSearch(): void {
-    this.searchQuery = '';
-    this.treeService.search('');
+  clearSearchQuery() {
+    this.input().nativeElement.value = '';
+    this.dataService.searchQuery.set('')
   }
 }

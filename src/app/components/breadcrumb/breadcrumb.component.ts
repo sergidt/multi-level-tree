@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { BreadcrumbItem } from '../../models/model';
-import { TreeService } from '../../tree.service';
+import { TreeService } from '../../services/tree.service';
 
 @Component({
   selector: 'app-breadcrumb',
@@ -10,7 +10,7 @@ import { TreeService } from '../../tree.service';
     <nav class="breadcrumb" aria-label="Breadcrumb">
       <ol>
         <li>
-          <a href="javascript:void(0)" (click)="navigateToRoot()">Home</a>
+          <a href="javascript:void(0)" (click)="navigateToRoot()">Organizational Structure</a>
         </li>
         @for (item of treeService.breadcrumb(); track $index; let last = $last) {
         <li>

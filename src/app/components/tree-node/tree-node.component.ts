@@ -15,7 +15,9 @@ import { TreeNode } from '../../models/model';
       (click)="onNodeClick()">
 
       <div class="node-content">
-        <div class="node-icon">{{node().icon}}</div>
+        <div class="node-icon">
+        <img class="icon" [src]="node().icon"/>
+        </div>
 
         <div class="node-info">
           <h3 class="node-name">{{ node().name }}</h3>

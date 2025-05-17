@@ -17,7 +17,7 @@
     }
 
     .breadcrumb li:not(:last-child)::after {
-      content: '/';
+      content: '>';
       margin: 0 var(--spacing-2);
       color: var(--neutral-400);
     }

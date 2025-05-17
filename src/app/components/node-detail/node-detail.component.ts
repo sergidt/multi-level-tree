@@ -12,14 +12,14 @@ import { TreeNode } from '../../models/model';
 
     <div class="node-detail slide-in">
       <div class="node-header">
-        <div class="node-icon large" >{{node.icon}}</div>
+        <img class="node-icon large" [src]="node.icon"/>
         <h2>{{ node.name }}</h2>
       </div>
 
       <div class="node-info-section">
         <p class="description">{{ node.description }}</p>
-
-        <div class="metadata-section" *ngIf="node.metadata">
+@if (node.metadata) {
+        <div class="metadata-section">
           <h3>Details</h3>
           @for (item of metadataItems; track $index) {
           <dl>
@@ -28,7 +28,7 @@ import { TreeNode } from '../../models/model';
           </dl>
           }
         </div>
-
+        }
         <div class="children-summary" *ngIf="isCategory() && node.children">
           <p>
             <span class="children-count">{{ node.children.length }}</span> items
