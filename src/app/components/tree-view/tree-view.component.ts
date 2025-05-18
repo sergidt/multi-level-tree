@@ -21,21 +21,12 @@ import { TreeNodeComponent } from "../tree-node/tree-node.component";
 
       <div class="content-container">
         <div class="tree-nodes-container">
-          @if(searchResults.hasValue()) {
+          @if(dataService.searchResults.hasValue()) {
             <div class="tree-nodes-list fade-in">
             @for (node of treeService.currentTree(); track $index) {
               <app-tree-node
                 [node]="node"
-                (nodeSelected)="onNodeSelected($event)"/>
-            }
-            </div>
-              }@else if(searchResults.hasValue()) {
-            <h2 class="section-title">Search Results</h2>
-            <div class="search-results-list fade-in">
-              @for (node of searchResults.value(); track $index) {
-              <app-tree-node
-                [node]="node"
-                [isSearchResult]="true"
+                [isSearchResult]="dataService.isSearchResult()"
                 (nodeSelected)="onNodeSelected($event)"/>
             }
             </div>
@@ -55,8 +46,6 @@ import { TreeNodeComponent } from "../tree-node/tree-node.component";
 export class TreeViewComponent {
   treeService = inject(TreeService);
   dataService = inject(DataService);
-
-  searchResults = this.dataService.searchResults;
 
   onNodeSelected(node: TreeNode): void {
     this.treeService.selectNode(node);

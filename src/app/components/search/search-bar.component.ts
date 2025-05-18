@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, DestroyRef, ElementRef, inject, viewChild } from '@angular/core';
+import { AfterViewInit, Component, DestroyRef, effect, ElementRef, inject, viewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { debounceTime, fromEvent } from 'rxjs';
@@ -35,6 +35,11 @@ export class SearchBarComponent implements AfterViewInit {
   dataService = inject(DataService);
   destroyRef = inject(DestroyRef);
   input = viewChild.required<ElementRef<HTMLInputElement>>('searchInput');
+
+  clearEffect = effect(() => {
+    if (this.dataService.searchQuery().trim() === '')
+      this.clearSearchQuery();
+  })
 
   ngAfterViewInit() {
     fromEvent(this.input().nativeElement, 'input')

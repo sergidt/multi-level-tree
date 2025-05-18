@@ -1,4 +1,4 @@
-import { effect, Injectable, resource, signal } from '@angular/core';
+import { computed, effect, Injectable, resource, signal } from '@angular/core';
 import { TREE_DATA } from '../models/data';
 import { TreeNode } from '../models/model';
 
@@ -10,6 +10,8 @@ export class DataService {
   data: TreeNode[] = TREE_DATA;
 
   searchQuery = signal<string>('');
+
+  isSearchResult = computed(() => this.searchQuery().trim() !== '');
 
   searchResults = resource<TreeNode[], string>({
     request: () => this.searchQuery(),

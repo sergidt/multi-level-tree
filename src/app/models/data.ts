@@ -14,110 +14,123 @@ export const TREE_DATA: TreeNode[] = [
     id: '0',
     name: 'HQ',
     description: 'Headquarter',
+    path: '',
     icon: ICONS.HQ,
-    children: [{
-      id: '1',
-      name: 'Barcelona',
-      description: 'Barcelona zone',
-      icon: ICONS.Location,
-      children: [
-        {
-          id: '1-1',
-          name: 'Diagonal Mar',
-          description: 'Diagonal Mar and glories',
-          icon: ICONS.Location,
-          children: [
-            {
-              id: '1-1-1',
-              name: 'Pallars',
-              description: 'Store in Pallars street',
-              icon: ICONS.Store,
-              children: [
-                {
-                  id: '1-1-1-1',
-                  name: 'Deli',
-                  description: 'Deli Service Department',
-                  children: [
-                    {
-                      id: '1-1-1-1-1',
-                      name: 'Scale 1',
-                      description: 'Scale 1 in Deli SD',
-                      metadata: {
-                        type: 'Scale',
-                        model: 'K3',
-                        ip: '192.168.4.23'
+    children: [
+      {
+        id: '1',
+        name: 'Barcelona',
+        path: 'HQ > Barcelona',
+        description: 'Barcelona zone',
+        icon: ICONS.Location,
+        children: [
+          {
+            id: '1-1',
+            name: 'Diagonal Mar',
+            description: 'Diagonal Mar and glories',
+            icon: ICONS.Location,
+            path: 'HQ > Barcelona > Diagonal Mar',
+            children: [
+              {
+                id: '1-1-1',
+                name: 'Pallars',
+                description: 'Store in Pallars street',
+                path: 'HQ > Barcelona > Diagonal Mar > Pallars',
+                icon: ICONS.Store,
+                children: [
+                  {
+                    id: '1-1-1-1',
+                    name: 'Deli',
+                    path: 'HQ > Barcelona > Diagonal Mar > Deli',
+                    description: 'Deli Service Department',
+                    children: [
+                      {
+                        id: '1-1-1-1-1',
+                        name: 'Scale 1',
+                        path: 'HQ > Barcelona > Diagonal Mar > Scale 1',
+                        description: 'Scale 1 in Deli SD',
+                        metadata: {
+                          type: 'Scale',
+                          model: 'K3',
+                          ip: '192.168.4.23'
+                        },
+                        icon: ICONS.Scale
                       },
-                      icon: ICONS.Scale
-                    },
-                    {
-                      id: '1-1-1-1-2',
-                      name: 'Labeler 1',
-                      description: 'Labeler 1 in Deli SD',
-                      metadata: {
-                        type: 'Labeler',
-                        model: 'XC1',
-                        ip: '192.168.3.13'
-                      },
-                      icon: ICONS.Labeler
-                    }
-                  ],
-                  icon: ICONS.Node
-                },
-                {
-                  id: '1-1-1-2',
-                  name: 'Fruits',
-                  description: 'Fruits Service Department',
-                  children: [
-                    {
-                      id: '1-1-1-2-1',
-                      name: 'Scale 1',
-                      description: 'Scale 1 in fruits SD',
-                      metadata: {
-                        type: 'Scale',
-                        model: 'K3',
-                        ip: '192.168.7.23'
-                      },
-                      icon: ICONS.Scale
-                    },
-                    {
-                      id: '1-1-1-2-2',
-                      name: 'Labeler 1',
-                      description: 'Labeler 1 in fruits SD',
-                      metadata: {
-                        type: 'Labeler',
-                        model: 'XC1',
-                        ip: '192.168.7.33'
-                      },
-                      icon: ICONS.Labeler
-                    }
-                  ],
-                  icon: ICONS.Node
-                },
-              ]
-            },
-            {
-              id: '1-1-2',
-              name: 'Glories',
-              description: 'Store in Les glories Mall',
-              icon: ICONS.Store,
-              children: [
-                {
-                  id: '1-1-2-1',
-                  name: 'Scale Glories 1',
-                  description: 'Scale in glories 1',
-                  metadata: {
-                    price: 1499,
-                    specs: '8GB RAM, 256GB SSD',
-                    rating: 4.6
+                      {
+                        id: '1-1-1-1-2',
+                        name: 'Labeler 1',
+                        path: 'HQ > Barcelona > Diagonal Mar > Labeler 1',
+                        description: 'Labeler 1 in Deli SD',
+                        metadata: {
+                          type: 'Labeler',
+                          model: 'XC1',
+                          ip: '192.168.3.13'
+                        },
+                        icon: ICONS.Labeler
+                      }
+                    ],
+                    icon: ICONS.Node
                   },
-                  icon: ICONS.Scale
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
+                  {
+                    id: '1-1-1-2',
+                    name: 'Fruits',
+                    path: 'HQ > Barcelona > Diagonal Mar > Fruits',
+                    description: 'Fruits Service Department',
+                    children: [
+                      {
+                        id: '1-1-1-2-1',
+                        name: 'Scale 1',
+                        path: 'HQ > Barcelona > Diagonal Mar > Fruits > Scale 1',
+                        description: 'Scale 1 in fruits SD',
+                        metadata: {
+                          type: 'Scale',
+                          model: 'K3',
+                          ip: '192.168.7.23'
+                        },
+                        icon: ICONS.Scale
+                      },
+                      {
+                        id: '1-1-1-2-2',
+                        name: 'Labeler 1',
+                        path: 'HQ > Barcelona > Diagonal Mar > Labeler 1',
+                        description: 'Labeler 1 in fruits SD',
+                        metadata: {
+                          type: 'Labeler',
+                          model: 'XC1',
+                          ip: '192.168.7.33'
+                        },
+                        icon: ICONS.Labeler
+                      }
+                    ],
+                    icon: ICONS.Node
+                  },
+                ]
+              },
+              {
+                id: '1-1-2',
+                name: 'Glories',
+                path: 'HQ > Barcelona > Diagonal Mar > Glories',
+                description: 'Store in Les glories Mall',
+                icon: ICONS.Store,
+                children: [
+                  {
+                    id: '1-1-2-1',
+                    name: 'Scale Glories 1',
+                    description: 'Scale in glories 1',
+                    path: 'HQ > Barcelona > Diagonal Mar > Glories > Scale Glories 1',
+                    metadata: {
+                      type: 'Scale',
+                      model: 'K3',
+                      ip: '192.168.7.23'
+                    },
+                    icon: ICONS.Scale
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
     ]
   }
 ];

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, EventEmitter, Input, input, Output } from '@angular/core';
+import { Component, computed, input, output } from '@angular/core';
 import { TreeNode } from '../../models/model';
 
 @Component({
@@ -11,7 +11,7 @@ import { TreeNode } from '../../models/model';
       class="tree-node"
       [class.is-category]="isCategory()"
       [class.is-leaf]="!isCategory()"
-      [class.is-search-result]="isSearchResult"
+      [class.is-search-result]="isSearchResult()"
       (click)="onNodeClick()">
 
       <div class="node-content">
@@ -31,6 +31,10 @@ import { TreeNode } from '../../models/model';
           }
         </div>
 
+@if (isSearchResult()) {
+  <div class="node-description">{{node().path}}</div>
+}
+
         @if(isCategory()) {
         <div class="node-action">
           <span class="arrow-icon"></span>
@@ -43,8 +47,8 @@ import { TreeNode } from '../../models/model';
 })
 export class TreeNodeComponent {
   node = input.required<TreeNode>();
-  @Input() isSearchResult: boolean = false;
-  @Output() nodeSelected = new EventEmitter<TreeNode>();
+  isSearchResult = input(false);
+  nodeSelected = output<TreeNode>();
 
   isCategory = computed(() => {
     const node = this.node();

@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { BreadcrumbItem } from '../../models/model';
+import { DataService } from '../../services/data.service';
 import { TreeService } from '../../services/tree.service';
 
 @Component({
@@ -30,8 +31,10 @@ import { TreeService } from '../../services/tree.service';
 export class BreadcrumbComponent {
 
   treeService = inject(TreeService);
+  dataService = inject(DataService);
 
   navigateToBreadcrumb(item: BreadcrumbItem): void {
+    this.dataService.searchQuery.set('');
     this.treeService.navigateToBreadcrumb(item);
   }
 

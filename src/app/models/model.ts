@@ -3,6 +3,7 @@ export interface TreeNode {
   name: string;
   description?: string;
   children?: TreeNode[];
+  path: string;
   metadata?: {
     [key: string]: any;
   };
